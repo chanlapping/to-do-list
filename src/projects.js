@@ -31,3 +31,15 @@ export function addTodo(projectId, title, description, dueDay, priority) {
     projects[projectId].todos.push(todo);
     localStorage.setItem('projects', JSON.stringify(projects));
 }
+
+export function deleteTodo(projectId, todoId) {
+    projects = JSON.parse(localStorage.getItem('projects'));
+    projects[projectId].todos.splice(todoId, 1);
+    localStorage.setItem('projects', JSON.stringify(projects));
+}
+
+export function editTodo(projectId, todoId, title, description, dueDay, priority) {
+    projects = JSON.parse(localStorage.getItem('projects'));
+    projects[projectId].todos[todoId] = {title, description, dueDay, priority};
+    localStorage.setItem('projects', JSON.stringify(projects));
+}
