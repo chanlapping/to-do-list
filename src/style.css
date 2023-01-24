@@ -1,5 +1,47 @@
 body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    min-height: 100vh;
+}
+
+main {
     display: flex;
     gap: 10px;
-    justify-content: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+input,
+button,
+select {
+    font: inherit;
+}
+
+.col {
+    flex: 1;
+}
+
+.project {
+    display: flex;
+    gap: 8px;
+}
+
+.project input {
+    flex: 1;
+}
+
+.project button {
+    width: 60px;
+}
+
+li:hover,
+li.active {
+    background-color: aqua;
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
 }
