@@ -69,20 +69,20 @@ export function setProject(name, id) {
 }
 
 export function addTodo(projectId, title, description, dueDay, priority) {
-    const todo = {title, description, dueDay, priority};
-    projects = JSON.parse(localStorage.getItem('projects'));
+    const todo = {title, description, dueDay, priority, done: false};
+    load();
     projects[projectId].todos.push(todo);
-    localStorage.setItem('projects', JSON.stringify(projects));
+    save();
 }
 
 export function deleteTodo(projectId, todoId) {
-    projects = JSON.parse(localStorage.getItem('projects'));
+    load();
     projects[projectId].todos.splice(todoId, 1);
-    localStorage.setItem('projects', JSON.stringify(projects));
+    save();
 }
 
-export function setTodo(projectId, todoId, title, description, dueDay, priority) {
-    projects = JSON.parse(localStorage.getItem('projects'));
-    projects[projectId].todos[todoId] = {title, description, dueDay, priority};
-    localStorage.setItem('projects', JSON.stringify(projects));
+export function setTodo(projectId, todoId, title, description, dueDay, priority, done) {
+    load();
+    projects[projectId].todos[todoId] = {title, description, dueDay, priority, done};
+    save();
 }

@@ -18,7 +18,9 @@ const newTaskBtn = document.querySelector('#new-task');
 
 newTaskBtn.addEventListener('click', function() {
     taskForm.reset();
-    currentProject.textContent = document.querySelector('.project.active').textContent;
+    formTodo.value = -1;
+    formDelBtn.disabled = true;
+    currentProject.textContent = 'project: ' + document.querySelector('.project.active input').value;
     message.textContent = 'fill in the form to create a new task';
 });
 
@@ -29,7 +31,32 @@ const message = document.querySelector('#message');
 const title = document.querySelector('#title');
 const description = document.querySelector('#description');
 const dueDay = document.querySelector('#due-day');
-const priority =document.querySelector('#priority');
+const priority = document.querySelector('#priority');
+const formProject = document.querySelector('#form-project');
+const formTodo = document.querySelector('#form-todo');
+const formSaveBtn = document.querySelector('#form-save-btn');
+const formDelBtn = document.querySelector('#form-delete-btn');
+
+formDelBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    todoData.deleteTodo(formProject.value, formTodo.value);
+    renderTodos(formProject.value);
+    taskForm.reset();
+    formTodo.value = -1;
+    this.disabled = true;
+});
+
+formSaveBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (formTodo.value == -1) {
+        todoData.addTodo(formProject.value, title.value, description.value, dueDay.value, priority.value, false);
+        formTodo.value = todoData.getProjects()[formProject.value].todos.length - 1;
+    } else {
+        todoData.setTodo(formProject.value, formTodo.value, title.value, description.value, dueDay.value, priority.value, false);
+    }
+    renderTodos(formProject.value);
+})
+
 
 export function renderProjects() {
     const projects = todoData.getProjects();
@@ -39,7 +66,7 @@ export function renderProjects() {
     for (let i = 0; i < projects.length; i++) {
 
         const li = document.createElement('li');
-        li.dataset.project = i;
+        li.dataset.projectId = i;
         li.classList.add('project');
 
         const projectName = document.createElement('input');
@@ -99,24 +126,28 @@ export function renderProjects() {
 
         projectsUL.appendChild(li);
 
-        // li.addEventListener('click', function() {
-        //     renderTodos(this.dataset.projectId);
-        //     taskForm.reset();
-        //     message.textContent = 'select a todo item, or fill in the form to create a new todo.';
-
-        //     const projectsLi = document.querySelectorAll('[data-project-id]');
-        //     for (let i = 0; i < projectsLi.length; i++) {
-        //         projectsLi[i].classList.remove('active');
-        //     }
-        //     projectsLi[this.dataset.projectId].classList.add('active');
-        // });
+        li.addEventListener('click', function() {
+            renderTodos(this.dataset.projectId);
+            taskForm.reset();
+            formProject.value = i;
+            formTodo.value = -1;
+            formDelBtn.disabled = true;
+            
+            const projectsLi = document.querySelectorAll('[data-project-id]');
+            for (let i = 0; i < projectsLi.length; i++) {
+                projectsLi[i].classList.remove('active');
+            }
+            projectsLi[this.dataset.projectId].classList.add('active');
+            currentProject.textContent = `project: ${document.querySelector('.project.active input').value}`;
+            message.textContent = 'select a todo item, or fill in the form to create a new todo.';
+        });
     }
 }
 
 
 
 export function renderTodos(projectId) {
-    const projects = JSON.parse(localStorage.getItem('projects'));
+    const projects = todoData.getProjects();
     const todos = projects[projectId].todos;
     
     todoUL.innerHTML = '';
@@ -141,12 +172,16 @@ export function renderTodos(projectId) {
 }
 
 export function renderTask(projectId, todoId) {
-    const projects = JSON.parse(localStorage.getItem('projects'));
+    const projects = todoData.getProjects();
     const todo = projects[projectId].todos[todoId];
-    message.textContent = `project: ${projects[projectId].name}`;
+    currentProject.textContent = `project: ${projects[projectId].name}`;
+    message.textContent = 'fill in the form and press save to edit';
     title.value = todo.title;
     description.value = todo.description;
     dueDay.value = todo.dueDay;
     priority.value = todo.priority;
+    formProject.value = projectId;
+    formTodo.value = todoId;
+    formDelBtn.disabled = false;
 }
 
