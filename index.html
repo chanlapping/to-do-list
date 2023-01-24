@@ -7,8 +7,45 @@
     <title>Document</title>
 </head>
 <body>
-    <ul class="projects"></ul>
-    <ul class="todos"></ul>
+    <header>
+        <h1>To Do List</h1>
+    </header>
+    <main>
+        <div class="col">
+            <h2>Projects</h2>
+            <form id="project-form">
+                <input type="text" id="new-project">
+                <button>New Project</button>
+            </form>
+            <ul id="projects"></ul>
+        </div>
+        <div class="col">
+            <h2>Tasks</h2>
+            <button id="new-task">New Task</button>
+            <ul id="todos"></ul>
+        </div>
+        <div class="col">
+            <h2 id="current-project"></h2>
+            <h2 id="message">Task Details</h2>
+            <form class="task-details" id="task-form">
+                <input type="checkbox" id="complete">
+                <label for="title">title</label>
+                <input type="text" id="title">
+                <label for="description">description</label>
+                <input type="text" id="description">
+                <label for="due-day">due day</label>
+                <input type="date" id="due-day">
+                <label for="priority">priority</label>
+                <select id="priority">
+                    <option value="low">low</option>
+                    <option value="normal">normal</option>
+                    <option value="high">high</option>
+                </select>
+                <button>save</button>
+                <button>delete</button>
+            </form>
+        </div>
+    </main>
     <script src="main.js"></script>
 </body>
 </html>
