@@ -4,35 +4,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="main.js" defer></script>
+    <title>To Do List</title>
 </head>
 <body>
     <header>
         <h1>To Do List</h1>
     </header>
+
     <main>
         <div class="col">
-            <h2>Projects</h2>
-            <form id="project-form">
-                <input type="text" id="new-project">
-                <button>New Project</button>
-            </form>
+            
+            <div class="col-header">
+                <h2>projects</h2>
+                <button>new</button>
+            </div>
             <ul id="projects"></ul>
         </div>
         <div class="col">
-            <h2>Tasks</h2>
-            <button id="new-task">New Task</button>
+            <h2>todos</h2>
             <ul id="todos"></ul>
         </div>
         <div class="col">
-            <h2 id="current-project"></h2>
-            <h2 id="message">Task Details</h2>
-            <form class="task-details" id="task-form">
-                <input type="checkbox" id="complete">
+            <h2 id="formTitle" class="form-title"></h2>
+            <form id="project-form">
+                <button id="edit-project-btn">edit</button>
+                <button id="del-project-btn">delete</button>
+                <div id="edit-tab" class="tab">
+                    <label for="project-name-input">project name:</label>
+                    <input type="text" id="project-name-input">
+                    <button>save</button>
+                    <button class="project-cancel-btn">cancel</button>
+                </div>
+                <div id="del-tab" class="tab">
+                    <p>are you sure? all todos of this project will also be deleted.</p>
+                    <button>confirm</button>
+                    <button class="project-cancel-btn">cancel</button>
+                </div>
+            </form>
+            <form id="todo-form" class="todo-form">
                 <label for="title">title</label>
                 <input type="text" id="title">
                 <label for="description">description</label>
-                <input type="text" id="description">
+                <textarea id="description" cols="30" rows="3"></textarea>
                 <label for="due-day">due day</label>
                 <input type="date" id="due-day">
                 <label for="priority">priority</label>
@@ -41,13 +55,12 @@
                     <option value="normal">normal</option>
                     <option value="high">high</option>
                 </select>
-                <button id="form-save-btn">save</button>
-                <button id="form-delete-btn">delete</button>
-                <input type="hidden" id="form-project" value="-1">
-                <input type="hidden" id="form-todo" value="-1">
+                <label for="done">
+                    <input type="checkbox" id="done">
+                    done
+                </label>
             </form>
         </div>
     </main>
-    <script src="main.js"></script>
 </body>
 </html>

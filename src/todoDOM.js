@@ -1,187 +1,163 @@
-import * as todoData from './projects';
+import * as todoData from './todoData.js';
 
-// project list
-const projectsUL = document.querySelector('#projects');
-const projectForm = document.querySelector('#project-form');
-const projectInput = document.querySelector('#new-project');
-
-projectForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    todoData.addProject(projectInput.value);
-    projectInput.value = '';
-    renderProjects();
-});
-
-// to do list
-const todoUL = document.querySelector('#todos');
-const newTaskBtn = document.querySelector('#new-task');
-
-newTaskBtn.addEventListener('click', function() {
-    taskForm.reset();
-    formTodo.value = -1;
-    formDelBtn.disabled = true;
-    currentProject.textContent = 'project: ' + document.querySelector('.project.active input').value;
-    message.textContent = 'fill in the form to create a new task';
-});
-
-// form controls
-const taskForm = document.querySelector('#task-form');
-const currentProject = document.querySelector('#current-project');
-const message = document.querySelector('#message');
-const title = document.querySelector('#title');
-const description = document.querySelector('#description');
-const dueDay = document.querySelector('#due-day');
-const priority = document.querySelector('#priority');
-const formProject = document.querySelector('#form-project');
-const formTodo = document.querySelector('#form-todo');
-const formSaveBtn = document.querySelector('#form-save-btn');
-const formDelBtn = document.querySelector('#form-delete-btn');
-
-formDelBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    todoData.deleteTodo(formProject.value, formTodo.value);
-    renderTodos(formProject.value);
-    taskForm.reset();
-    formTodo.value = -1;
-    this.disabled = true;
-});
-
-formSaveBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (formTodo.value == -1) {
-        todoData.addTodo(formProject.value, title.value, description.value, dueDay.value, priority.value, false);
-        formTodo.value = todoData.getProjects()[formProject.value].todos.length - 1;
-    } else {
-        todoData.setTodo(formProject.value, formTodo.value, title.value, description.value, dueDay.value, priority.value, false);
-    }
-    renderTodos(formProject.value);
-})
-
-
-export function renderProjects() {
-    const projects = todoData.getProjects();
-    
-    projectsUL.innerHTML = '';
-    
-    for (let i = 0; i < projects.length; i++) {
-
+export function renderProjectList() {
+    const projects = todoData.getProjectsList();
+    const ul = document.querySelector('#projects');
+    ul.innerHTML = '';
+    for (let item of projects) {
         const li = document.createElement('li');
-        li.dataset.projectId = i;
-        li.classList.add('project');
-
-        const projectName = document.createElement('input');
-        projectName.value = projects[i].name;
-        projectName.disabled = true;
-
-        const editBtn = document.createElement('button');
-        editBtn.textContent = 'edit';
-        editBtn.addEventListener('click', function() {
-            projectName.disabled = false;
-            projectName.focus();
-            const controls = this.parentElement.children;
-            controls[1].style.display = 'none';
-            controls[2].style.display = 'none';
-            controls[3].style.display = 'inline';
-            controls[4].style.display = 'inline';
-        });
-
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'delete';
-        delBtn.addEventListener('click', () => {
-            todoData.deleteProject(i);
-            renderProjects();
-        });
-
-        const cancelBtn = document.createElement('button');
-        cancelBtn.textContent = 'cancel';
-        cancelBtn.style.display = 'none';
-        cancelBtn.addEventListener('click', function() {
-            projectName.disabled = true;
-            projectName.value = projects[i].name;
-            const controls = this.parentElement.children;
-            controls[1].style.display = 'inline';
-            controls[2].style.display = 'inline';
-            controls[3].style.display = 'none';
-            controls[4].style.display = 'none';
-        });
-
-        const saveBtn = document.createElement('button');
-        saveBtn.textContent = 'save';
-        saveBtn.style.display = 'none';
-        saveBtn.addEventListener('click', function() {
-            projectName.disabled = true;
-            const controls = this.parentElement.children;
-            controls[1].style.display = 'inline';
-            controls[2].style.display = 'inline';
-            controls[3].style.display = 'none';
-            controls[4].style.display = 'none';
-            todoData.setProject(projectName.value, i);
-        });
-
-        li.appendChild(projectName);
-        li.appendChild(editBtn);
-        li.appendChild(delBtn);
-        li.appendChild(cancelBtn);
-        li.appendChild(saveBtn);
-
-        projectsUL.appendChild(li);
+        li.textContent = item;
+        ul.appendChild(li);
 
         li.addEventListener('click', function() {
-            renderTodos(this.dataset.projectId);
-            taskForm.reset();
-            formProject.value = i;
-            formTodo.value = -1;
-            formDelBtn.disabled = true;
-            
-            const projectsLi = document.querySelectorAll('[data-project-id]');
-            for (let i = 0; i < projectsLi.length; i++) {
-                projectsLi[i].classList.remove('active');
+            const projectLis = document.querySelectorAll('#projects li');
+            for (let li of projectLis) {
+                li.classList.remove('active');
             }
-            projectsLi[this.dataset.projectId].classList.add('active');
-            currentProject.textContent = `project: ${document.querySelector('.project.active input').value}`;
-            message.textContent = 'select a todo item, or fill in the form to create a new todo.';
+            this.classList.add('active');
+            renderProject(item);
+            // resetForm();
+            showProjectForm(this.textContent);
         });
     }
 }
 
-
-
-export function renderTodos(projectId) {
-    const projects = todoData.getProjects();
-    const todos = projects[projectId].todos;
-    
-    todoUL.innerHTML = '';
-
-    for (let i = 0; i < todos.length; i++) {
+function renderProject(projectName) {
+    const project = todoData.getProject(projectName);
+    const ul = document.querySelector('#todos');
+    ul.innerHTML = '';
+    for (let item in project) {
         const li = document.createElement('li');
-        li.dataset.projectId = projectId;
-        li.dataset.todoId = i;
-        li.textContent = todos[i].title;
-        todoUL.appendChild(li);
+        li.textContent = item;
+        ul.appendChild(li);
 
         li.addEventListener('click', function() {
-            renderTask(this.dataset.projectId, this.dataset.todoId);
-
-            const todosLi = document.querySelectorAll('[data-todo-id]');
-            for (let i = 0; i < todosLi.length; i++) {
-                todosLi[i].classList.remove('active');
+            const todoLis = document.querySelectorAll('#todos li');
+            for (let li of todoLis) {
+                li.classList.remove('active');
             }
-            todosLi[this.dataset.todoId].classList.add('active');
+            this.classList.add('active');
+            renderTodo(projectName, item);
         });
     }
 }
 
-export function renderTask(projectId, todoId) {
-    const projects = todoData.getProjects();
-    const todo = projects[projectId].todos[todoId];
-    currentProject.textContent = `project: ${projects[projectId].name}`;
-    message.textContent = 'fill in the form and press save to edit';
+function renderTodo(projectName, todoName) {
+    const todo = todoData.getTodo(projectName, todoName);
+
+    document.querySelector('#formTitle').textContent = `project: ${projectName}`;
+
+    const title = document.querySelector('#title');
+    const description = document.querySelector('#description');
+    const dueDay = document.querySelector('#due-day');
+    const priority = document.querySelector('#priority');
+    const done = document.querySelector('#done');
+
     title.value = todo.title;
     description.value = todo.description;
     dueDay.value = todo.dueDay;
     priority.value = todo.priority;
-    formProject.value = projectId;
-    formTodo.value = todoId;
-    formDelBtn.disabled = false;
+    done.checked = todo.done;
+
+    showTodoForm();
 }
 
+function resetForm() {
+    const form = document.querySelector('#todo-form');
+    form.reset();
+    document.querySelector('#formTitle').textContent = 'fill in the form to create a new todo';
+}
+
+function showProjectForm(projectName) {
+    document.querySelector('#formTitle').textContent = `project: ${projectName}`;
+    document.querySelector('#project-form').style.display = 'block';
+    document.querySelector('#todo-form').style.display = 'none';
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+}
+
+function showTodoForm(projectName, todoName) {
+    document.querySelector('#project-form').style.display = 'none';
+    document.querySelector('#todo-form').style.display = 'flex';
+}
+
+// UI
+// project
+
+const editProjectBtn = document.querySelector('#edit-project-btn');
+editProjectBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#edit-tab').classList.add('active');
+    document.querySelector('#del-tab').classList.remove('active');
+    const title = document.querySelector('#formTitle').textContent;
+    const input = document.querySelector('#project-name-input');
+    input.focus();
+    input.value = title.split(': ')[1];
+});
+
+const delProjectBtn = document.querySelector('#del-project-btn');
+delProjectBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#edit-tab').classList.remove('active');
+    document.querySelector('#del-tab').classList.add('active');
+});
+
+const projectCancelBtns = document.querySelectorAll('.project-cancel-btn');
+projectCancelBtns.forEach(btn => btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#edit-tab').classList.remove('active');
+    document.querySelector('#del-tab').classList.remove('active');
+}))
+
+/* const newProjectBtn = document.querySelector('#new-project-btn');
+newProjectBtn.addEventListener('click', function() {
+    const input = document.querySelector('#new-project-input');
+    input.style.display = 'inline';
+    input.focus();
+    document.querySelector('#add-project-btn').style.display = 'inline';
+    this.style.display = 'none';
+});
+
+const addNewProjectBtn = document.querySelector('#add-project-btn');
+addNewProjectBtn.addEventListener('click', function() {
+    const input = document.querySelector('#new-project-input');
+    const projectName = input.value;
+    if (projectName === '' || todoData.getProjectsList().indexOf(projectName) >= 0) {
+        input.value = 'error';
+        return;
+    }
+    todoData.addProject(projectName);
+    renderProjectList();
+    input.value = '';
+    input.style.display = 'none';
+    this.style.display = 'none';
+    newProjectBtn.style.display = 'inline';
+}) */
+
+const todo1 = {
+    title: "in box task",
+    description: "hkbn",
+    dueDay: "2023-01-25",
+    priority: "high",
+    done: true
+};
+
+const todo2 = {
+    title: "office task",
+    description: "sun mobile",
+    dueDay: "2023-01-30",
+    priority: "normal",
+    done: false
+};
+
+const todo3 = {
+    title: "cable",
+    description: "now tv",
+    dueDay: "2023-01-26",
+    priority: "high",
+    done: false
+};
+
+
+// renderProjectList();
+// document.querySelector('#projects li').click();

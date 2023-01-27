@@ -1,4 +1,4 @@
-let projects = [];
+let data = {};
 
 function storageAvailable(type) {
     let storage;
@@ -27,62 +27,72 @@ function storageAvailable(type) {
 
 function load() {
     if (storageAvailable('localStorage')) {
-        projects = JSON.parse(localStorage.getItem('projects'));
+        data = JSON.parse(localStorage.getItem('data')) || {};
     }
 }
 
 function save() {
     if (storageAvailable('localStorage')) {
-        localStorage.setItem('projects', JSON.stringify(projects));
+        localStorage.setItem('data', JSON.stringify(data));
     }
 }
 
+// crud
 
-export function addProject(name) {
+export function addProject(projectName) {
     load();
-    if (projects === null) {
-        projects = [];
-    }
-    const project = {
-        name: name,
-        todos: []
-    }
-    projects.push(project);
+    data[projectName] = {};
     save();
 }
 
-export function getProjects() {
+export function getProject(projectName) {
     load();
-    return projects;
+    return data[projectName];
 }
 
-export function deleteProject(id) {
+export function getProjectsList() {
     load();
-    projects.splice(id, 1);
+    return Object.keys(data);
+}
+
+export function setProjectName(oldName, newName) {
+    load();
+    data[newName] = data[oldName];
+    delete data[oldName];
     save();
 }
 
-export function setProject(name, id) {
+export function deleteProject(projectName) {
     load();
-    projects[id].name = name;
+    delete data[projectName];
     save();
 }
 
-export function addTodo(projectId, title, description, dueDay, priority) {
-    const todo = {title, description, dueDay, priority, done: false};
+export function addTodo(projectName, todo) {
     load();
-    projects[projectId].todos.push(todo);
+    data[projectName][todo.title] = todo;
     save();
 }
 
-export function deleteTodo(projectId, todoId) {
+export function getTodo(projectName, todoName) {
     load();
-    projects[projectId].todos.splice(todoId, 1);
+    return data[projectName][todoName];
+}
+
+export function setTodo(projectName, todoName, todo) {
+    load();
+    if (todoName !== todo.title) {
+        delete data[projectName][todoName];
+    } 
+    data[projectName][todo.title] = todo;
     save();
 }
 
-export function setTodo(projectId, todoId, title, description, dueDay, priority, done) {
+export function deleteTodo(projectName, todoName) {
     load();
-    projects[projectId].todos[todoId] = {title, description, dueDay, priority, done};
+    delete data[projectName][todoName];
     save();
 }
+
+
+

@@ -1,4 +1,4 @@
-import * as todoData from './projects';
+import * as todoData from './todoData';
 import * as todoDOM from './todoDOM';
 import './style.css';
 
@@ -7,7 +7,5 @@ import './style.css';
 
 
 
-todoDOM.renderProjects();
-todoDOM.renderTodos(0);
-
-todoDOM.renderTask(0, 0);
+todoDOM.renderProjectList();
+document.querySelector('#projects li').click();
