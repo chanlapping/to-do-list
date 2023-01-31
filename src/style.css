@@ -1,9 +1,31 @@
+:root {
+    --red: #ff6600;
+    --green: #99ff99;
+    --yellow: #ffff99;
+    --white: #f8f2f2;
+    --dark: #7e5d5d;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+header {
+    height: 150px;
+    margin: 0;
+    padding: 1rem;
+    background-color: var(--dark);
 }
 
 h1 {
     text-align: center;
+    color: var(--white);
+    font-size: 4rem;
 }
 
 input,
@@ -17,25 +39,66 @@ textarea {
     resize: vertical;
 }
 
+input,
+textarea,
+select
+{
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
 ul {
     list-style: none;
     padding: 0;
+    margin: 0;
+}
+
+button {
+    padding: 1rem;
+    border: none;
+    background-color: var(--dark);
+    color: var(--white);
+    margin: 0.5rem 0;
+    cursor: pointer;
+    display: inline;
+    border-radius: 8px;
+}
+
+button.red {
+    background-color: var(--red);
+    color: var(--white);
+}
+
+button.small {
+    width: 100px;
+}
+
+button:disabled {
+    display: none;
 }
 
 main {
+    flex: 1;
     display: flex;
     gap: 20px;
+    align-items: stretch;
+    background-color: var(--white);
 }
 
 .col {
-    width: 30%;
-    padding: 1rem;
+    flex: 1;
+    padding: 2rem;
+    margin: 1rem;
+    color: var(--dark);
+    border-radius: 1rem;
+    background-color: #fff;
 }
 
 .col-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 2rem;
 }
 
 .todo-form {
@@ -43,18 +106,38 @@ main {
     flex-direction: column;
 }
 
-label, li {
+label {
     margin-top: 1rem;
 }
 
-li.active,
-li:hover {
-    background-color: aquamarine;
+.item {
+    margin: 8px 0;
+    padding: 1rem;
+    border-radius: 8px;
+}
+.item.active,
+.item:hover {
+    box-shadow: 0 0 3px 3px var(--dark);
+}
+.item.high {
+    background-color: var(--red);
+}
+.item.normal {
+    background-color: var(--yellow);
+}
+.item.low {
+    background-color: var(--green);
+}
+.item.done {
+    text-decoration: line-through;
+    opacity: 0.5;
 }
 
 .form-title {
     width: 100%;
     height: 3rem;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .tab {
