@@ -17,29 +17,41 @@
             
             <div class="col-header">
                 <h2>projects</h2>
-                <button>new</button>
+                <button id="new-project-btn" class="small">+ project</button>
             </div>
             <ul id="projects"></ul>
         </div>
         <div class="col">
-            <h2>todos</h2>
+            <div class="col-header">
+                <h2>todos</h2>
+                <button id="new-todo-btn" class="small">+ todo</button>
+            </div>
             <ul id="todos"></ul>
         </div>
         <div class="col">
-            <h2 id="formTitle" class="form-title"></h2>
+            <div class="col-header">
+                <h2 id="formTitle" ></h2>
+            </div>
             <form id="project-form">
-                <button id="edit-project-btn">edit</button>
-                <button id="del-project-btn">delete</button>
+                <button id="edit-project-btn" type="button" class="small">edit</button>
+                <button id="del-project-btn" class="red" type="button" class="small">delete</button>
+                <div id="info-tab" class="tab">
+                    <ul>
+                        <li>click on items in the left column to select project.</li>
+                        <li>click on items in the middle column to select todo.</li>
+                        <li>options and item details will be shown in the right column.</li>
+                        <li>'in box' is the default project. It cannot be deleted and will be automatically selected every time you open the app.</li>
+                    </ul>
+                </div>
                 <div id="edit-tab" class="tab">
                     <label for="project-name-input">project name:</label>
                     <input type="text" id="project-name-input">
-                    <button>save</button>
-                    <button class="project-cancel-btn">cancel</button>
+                    <button id="save-project-btn" type="button">save</button>
+                    <button id="add-project-btn" type="button">add</button>
                 </div>
                 <div id="del-tab" class="tab">
                     <p>are you sure? all todos of this project will also be deleted.</p>
-                    <button>confirm</button>
-                    <button class="project-cancel-btn">cancel</button>
+                    <button type="button" id="confirm-del-btn" class="red">confirm</button>
                 </div>
             </form>
             <form id="todo-form" class="todo-form">
@@ -59,6 +71,9 @@
                     <input type="checkbox" id="done">
                     done
                 </label>
+                <button id="save-todo-btn">save</button>
+                <button id="add-todo-btn">add</button>
+                <button id="del-todo-btn" class="red">delete</button>
             </form>
         </div>
     </main>
