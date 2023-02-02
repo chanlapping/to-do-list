@@ -41,7 +41,7 @@ function save() {
 
 export function addProject(projectName) {
     load();
-    data[projectName] = {};
+    data[projectName] = {id: Date.now()};
     save();
 }
 
@@ -50,9 +50,25 @@ export function getProject(projectName) {
     return data[projectName];
 }
 
+// getProject: returns an array of todo keys, sorted by due day.
+export function getProjectKeys(projectName) {
+    load();
+    const project = data[projectName];
+    let todos = Object.keys(project);
+    todos = todos.filter(key => key != 'id');
+    todos.sort((a, b) => {
+        const aDate = project[a].dueDay;
+        const bDate = project[b].dueDay;
+        return Date.parse(aDate) - Date.parse(bDate);
+    });
+    return todos;
+}
+
 export function getProjectsList() {
     load();
-    return Object.keys(data);
+    let projects = Object.keys(data);
+    projects.sort((a, b) => data[a].id - data[b].id);
+    return projects;
 }
 
 export function setProjectName(oldName, newName) {

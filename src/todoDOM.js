@@ -27,9 +27,10 @@ export function renderProjectList(activeProject) {
 
 export function renderProject(projectName, activeTodo) {
     const project = todoData.getProject(projectName);
+    const todos = todoData.getProjectKeys(projectName);
     const ul = document.querySelector('#todos');
     ul.innerHTML = '';
-    for (let item in project) {
+    for (let item of todos) {
         const li = document.createElement('li');
         li.textContent = item;
         li.classList.add('item');
@@ -65,7 +66,7 @@ function resetForm() {
     document.querySelector('#formTitle').textContent = 'fill in the form to create a new todo';
 }
 
-function showProjectForm(projectName) {
+export function showProjectForm(projectName) {
     document.querySelector('#formTitle').textContent = projectName;
     document.querySelector('#project-form').style.display = 'block';
     document.querySelector('#todo-form').style.display = 'none';
@@ -75,6 +76,10 @@ function showProjectForm(projectName) {
 
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => tab.classList.remove('active'));
+
+    if (projectName == 'in box') {
+        document.querySelector('#info-tab').classList.add('active');
+    }
 }
 
 function showTodoForm(projectName, todoName) {
