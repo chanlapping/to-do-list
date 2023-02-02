@@ -1,4 +1,5 @@
 import * as todoData from './todoData.js';
+import { format } from 'date-fns';
 
 export function renderProjectList(activeProject) {
     const projects = todoData.getProjectsList();
@@ -32,7 +33,12 @@ export function renderProject(projectName, activeTodo) {
     ul.innerHTML = '';
     for (let item of todos) {
         const li = document.createElement('li');
-        li.textContent = item;
+        let dueDay = new Date(project[item].dueDay);
+        // li.textContent = item + format(dueDay, "dd-MMM-yy");
+        li.innerHTML = `
+        <span>${item}</span>
+        <span>${format(dueDay, "dd-MMM-yy")}</span>
+        `;
         li.classList.add('item');
         li.classList.add(project[item].priority);
         if (project[item].done) {

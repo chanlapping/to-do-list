@@ -114,18 +114,21 @@ label {
     margin: 8px 0;
     padding: 1rem;
     border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
 }
 .item.active,
 .item:hover {
     box-shadow: 0 0 3px 3px var(--dark);
 }
-.item.high {
+.high {
     background-color: var(--red);
 }
-.item.normal {
+.normal {
     background-color: var(--yellow);
 }
-.item.low {
+
+.low {
     background-color: var(--green);
 }
 .item.done {
