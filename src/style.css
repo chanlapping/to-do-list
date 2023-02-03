@@ -64,7 +64,7 @@ button {
     border-radius: 8px;
 }
 
-button.red {
+.red {
     background-color: var(--red);
     color: var(--white);
 }
